@@ -6,6 +6,7 @@ import { cn } from '../lib/utils';
 import { useTheme } from '../contexts/ThemeContext';
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 import { useDragAndDrop } from '../hooks/useDragAndDrop';
+import GlassSurface from './GlassSurface';
 
 interface EmailListProps {
   emails: Email[];
@@ -284,14 +285,7 @@ const EmailListItem = React.forwardRef<HTMLDivElement, EmailListItemProps>(({
     <div {...dragHandlers}>
       <motion.div
         ref={ref}
-        className={cn(
-          "border-b border-cream/5 px-6 py-4 cursor-pointer transition-all duration-300 group",
-          isLiquidGlass ? "liquid-glass-email-item" : "email-item",
-          isEmailSelected && "selected",
-          !email.isRead && "unread",
-          isSelected && "bg-cloud-blue/10 border-cloud-blue/20"
-        )}
-        onClick={() => onEmailSelect(email.id)}
+        className="px-2 py-1"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: 20 }}
@@ -299,134 +293,149 @@ const EmailListItem = React.forwardRef<HTMLDivElement, EmailListItemProps>(({
         whileHover={{ scale: 1.01 }}
         layout
       >
-      <div className="flex items-start gap-4">
-        <motion.button
-          onClick={(e) => {
-            e.stopPropagation();
-            onEmailSelectionToggle?.(email.id);
-          }}
-          className="mt-1 p-1 hover:bg-cream/10 rounded transition-colors"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          {isSelected ? (
-            <CheckSquare size={16} className="text-cloud-blue" />
-          ) : (
-            <Square size={16} className="text-cream/40 group-hover:text-cream/60" />
+        <GlassSurface
+          width="100%"
+          height="auto"
+          borderRadius={16}
+          className={cn(
+            "cursor-pointer transition-all duration-300 group",
+            isLiquidGlass ? "liquid-glass-email-item" : "email-item",
+            isEmailSelected && "selected",
+            !email.isRead && "unread",
+            isSelected && "bg-cloud-blue/10 border-cloud-blue/20"
           )}
-        </motion.button>
-        
-        <motion.button
-          onClick={(e) => {
-            e.stopPropagation();
-            onStarToggle(email.id);
-          }}
-          className="mt-1 hover:bg-cream/10 rounded p-1 transition-colors"
-          whileHover={{ scale: 1.2 }}
-          whileTap={{ scale: 0.8 }}
+          onClick={() => onEmailSelect(email.id)}
+          contentAlignment="left"
         >
-          <Star
-            size={16}
-            className={email.isStarred ? 'text-yellow-400 fill-yellow-400' : 'text-cream/40 group-hover:text-cream/60'}
-          />
-        </motion.button>
-
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-3">
-              {email.from.avatar && (
-                <motion.img
-                  src={email.from.avatar}
-                  alt={email.from.name}
-                  className="w-8 h-8 rounded-full object-cover border border-cream/20"
-                  whileHover={{ scale: 1.1 }}
-                />
-              )}
-              <span className={cn(
-                "text-sm font-light text-cream/90",
-                !email.isRead && "font-medium text-cream"
-              )}>
-                {email.from.name}
-              </span>
-              {email.isImportant && (
-                <motion.span 
-                  className="w-2 h-2 bg-gradient-to-r from-cloud-blue to-cloud-lavender rounded-full"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 500 }}
-                />
-              )}
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-cream/50 flex-shrink-0 font-light">
-                {formatTime(email.timestamp)}
-              </span>
-              
-              {/* Quick actions on hover */}
-              <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                <motion.button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onArchive(email.id);
-                  }}
-                  className="p-1 hover:bg-cream/20 rounded transition-colors"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Archive size={12} className="text-cream/60" />
-                </motion.button>
-                <motion.button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onDelete(email.id);
-                  }}
-                  className="p-1 hover:bg-cream/20 rounded transition-colors"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Trash2 size={12} className="text-cream/60" />
-                </motion.button>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 mb-2">
-            <h3 className={cn(
-              "text-sm truncate font-light text-cream/85",
-              !email.isRead && "font-medium text-cream"
-            )}>
-              {email.subject}
-            </h3>
-            {email.attachments && email.attachments.length > 0 && (
-              <Paperclip size={12} className="text-cream/40 flex-shrink-0" />
-            )}
-          </div>
-
-          <p className="text-sm text-cream/60 truncate font-light">
-            {email.body.replace(/\n/g, ' ')}
-          </p>
-
-          {email.labels.length > 0 && (
-            <motion.div 
-              className="flex gap-2 mt-3"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
+          <div className="flex items-start gap-4 p-4">
+            <motion.button
+              onClick={(e) => {
+                e.stopPropagation();
+                onEmailSelectionToggle?.(email.id);
+              }}
+              className="mt-1 p-1 hover:bg-cream/10 rounded transition-colors"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
-              {email.labels.map((label) => (
-                <motion.span
-                  key={label}
-                  className="px-3 py-1 text-xs bg-cloud-blue/20 text-cream/80 rounded-full border border-cloud-blue/30 font-light"
-                  whileHover={{ scale: 1.05 }}
+              {isSelected ? (
+                <CheckSquare size={16} className="text-cloud-blue" />
+              ) : (
+                <Square size={16} className="text-cream/40 group-hover:text-cream/60" />
+              )}
+            </motion.button>
+            
+            <motion.button
+              onClick={(e) => {
+                e.stopPropagation();
+                onStarToggle(email.id);
+              }}
+              className="mt-1 hover:bg-cream/10 rounded p-1 transition-colors"
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.8 }}
+            >
+              <Star
+                size={16}
+                className={email.isStarred ? 'text-yellow-400 fill-yellow-400' : 'text-cream/40 group-hover:text-cream/60'}
+              />
+            </motion.button>
+
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-3">
+                  {email.from.avatar && (
+                    <motion.img
+                      src={email.from.avatar}
+                      alt={email.from.name}
+                      className="w-8 h-8 rounded-full object-cover border border-cream/20"
+                      whileHover={{ scale: 1.1 }}
+                    />
+                  )}
+                  <span className={cn(
+                    "text-sm font-light text-cream/90",
+                    !email.isRead && "font-medium text-cream"
+                  )}>
+                    {email.from.name}
+                  </span>
+                  {email.isImportant && (
+                    <motion.span 
+                      className="w-2 h-2 bg-gradient-to-r from-cloud-blue to-cloud-lavender rounded-full"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 500 }}
+                    />
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-cream/50 flex-shrink-0 font-light">
+                    {formatTime(email.timestamp)}
+                  </span>
+                  
+                  {/* Quick actions on hover */}
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                    <motion.button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onArchive(email.id);
+                      }}
+                      className="p-1 hover:bg-cream/20 rounded transition-colors"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <Archive size={12} className="text-cream/60" />
+                    </motion.button>
+                    <motion.button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(email.id);
+                      }}
+                      className="p-1 hover:bg-cream/20 rounded transition-colors"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <Trash2 size={12} className="text-cream/60" />
+                    </motion.button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className={cn(
+                  "text-sm truncate font-light text-cream/85",
+                  !email.isRead && "font-medium text-cream"
+                )}>
+                  {email.subject}
+                </h3>
+                {email.attachments && email.attachments.length > 0 && (
+                  <Paperclip size={12} className="text-cream/40 flex-shrink-0" />
+                )}
+              </div>
+
+              <p className="text-sm text-cream/60 font-light line-clamp-2">
+                {email.body.replace(/\n/g, ' ')}
+              </p>
+
+              {email.labels.length > 0 && (
+                <motion.div 
+                  className="flex gap-2 mt-3"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
                 >
-                  {label}
-                </motion.span>
-              ))}
-            </motion.div>
-          )}
-        </div>
-      </div>
-    </motion.div>
+                  {email.labels.map((label) => (
+                    <motion.span
+                      key={label}
+                      className="px-3 py-1 text-xs bg-cloud-blue/20 text-cream/80 rounded-full border border-cloud-blue/30 font-light"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      {label}
+                    </motion.span>
+                  ))}
+                </motion.div>
+              )}
+            </div>
+          </div>
+        </GlassSurface>
+      </motion.div>
     </div>
   );
 });

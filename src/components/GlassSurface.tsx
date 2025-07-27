@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useId } from "react";
+import { cn } from "../lib/utils";
 
 export interface GlassSurfaceProps {
   children?: React.ReactNode;
@@ -42,6 +43,7 @@ export interface GlassSurfaceProps {
   className?: string;
   style?: React.CSSProperties;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
+  contentAlignment?: "center" | "left" | "right";
 }
 
 const useDarkMode = () => {
@@ -66,23 +68,24 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   width = 200,
   height = 80,
   borderRadius = 20,
-  borderWidth = 0.7,
+  borderWidth = 0.0,
   brightness = 50,
   opacity = 0.93,
-  blur = 11,
+  blur = 2,
   displace = 0,
   backgroundOpacity = 0,
   saturation = 1,
-  distortionScale = -180,
+  distortionScale = -50,
   redOffset = 0,
-  greenOffset = 10,
-  blueOffset = 20,
+  greenOffset = 3,
+  blueOffset = 6,
   xChannel = "R",
   yChannel = "G",
   mixBlendMode = "difference",
   className = "",
   style = {},
   onClick,
+  contentAlignment = "center",
 }) => {
   const uniqueId = useId().replace(/:/g, "-");
   const filterId = `glass-filter-${uniqueId}`;
@@ -102,7 +105,7 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     const rect = containerRef.current?.getBoundingClientRect();
     const actualWidth = rect?.width || 400;
     const actualHeight = rect?.height || 200;
-    const edgeSize = Math.min(actualWidth, actualHeight) * (borderWidth * 0.5);
+    const edgeSize = Math.min(actualWidth, actualHeight) * (borderWidth * 0.1);
 
     const svgContent = `
       <svg viewBox="0 0 ${actualWidth} ${actualHeight}" xmlns="http://www.w3.org/2000/svg">
@@ -240,9 +243,9 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
           return {
             ...baseStyles,
             background: "rgba(0, 0, 0, 0.4)",
-            border: "1px solid rgba(255, 255, 255, 0.2)",
-            boxShadow: `inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
-                        inset 0 -1px 0 0 rgba(255, 255, 255, 0.1)`,
+            border: "0.3px solid rgba(255, 255, 255, 0.1)",
+            boxShadow: `inset 0 0.3px 0 0 rgba(255, 255, 255, 0.1),
+                        inset 0 -0.3px 0 0 rgba(255, 255, 255, 0.05)`,
           };
         } else {
           return {
@@ -250,9 +253,9 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
             background: "rgba(255, 255, 255, 0.1)",
             backdropFilter: "blur(12px) saturate(1.8) brightness(1.2)",
             WebkitBackdropFilter: "blur(12px) saturate(1.8) brightness(1.2)",
-            border: "1px solid rgba(255, 255, 255, 0.2)",
-            boxShadow: `inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
-                        inset 0 -1px 0 0 rgba(255, 255, 255, 0.1)`,
+            border: "0.3px solid rgba(255, 255, 255, 0.1)",
+            boxShadow: `inset 0 0.3px 0 0 rgba(255, 255, 255, 0.1),
+                        inset 0 -0.3px 0 0 rgba(255, 255, 255, 0.05)`,
           };
         }
       } else {
@@ -260,9 +263,9 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
           return {
             ...baseStyles,
             background: "rgba(255, 255, 255, 0.4)",
-            border: "1px solid rgba(255, 255, 255, 0.3)",
-            boxShadow: `inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
-                        inset 0 -1px 0 0 rgba(255, 255, 255, 0.3)`,
+            border: "0.3px solid rgba(255, 255, 255, 0.15)",
+            boxShadow: `inset 0 0.3px 0 0 rgba(255, 255, 255, 0.2),
+                        inset 0 -0.3px 0 0 rgba(255, 255, 255, 0.1)`,
           };
         } else {
           return {
@@ -270,11 +273,11 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
             background: "rgba(255, 255, 255, 0.25)",
             backdropFilter: "blur(12px) saturate(1.8) brightness(1.1)",
             WebkitBackdropFilter: "blur(12px) saturate(1.8) brightness(1.1)",
-            border: "1px solid rgba(255, 255, 255, 0.3)",
+            border: "0.3px solid rgba(255, 255, 255, 0.15)",
             boxShadow: `0 8px 32px 0 rgba(31, 38, 135, 0.2),
                         0 2px 16px 0 rgba(31, 38, 135, 0.1),
-                        inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
-                        inset 0 -1px 0 0 rgba(255, 255, 255, 0.2)`,
+                        inset 0 0.3px 0 0 rgba(255, 255, 255, 0.2),
+                        inset 0 -0.3px 0 0 rgba(255, 255, 255, 0.1)`,
           };
         }
       }
@@ -282,7 +285,7 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   };
 
   const glassSurfaceClasses =
-    "relative flex items-center justify-center overflow-hidden transition-opacity duration-[260ms] ease-out";
+    "relative flex overflow-hidden transition-opacity duration-[260ms] ease-out";
 
   const focusVisibleClasses = isDarkMode
     ? "focus-visible:outline-2 focus-visible:outline-[#0A84FF] focus-visible:outline-offset-2"
@@ -380,7 +383,12 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
         </defs>
       </svg>
 
-      <div className="w-full h-full flex items-center justify-center p-2 rounded-[inherit] relative z-10">
+      <div className={cn(
+        "w-full h-full flex p-2 rounded-[inherit] relative z-10",
+        contentAlignment === "center" && "items-center justify-center",
+        contentAlignment === "left" && "items-start justify-start",
+        contentAlignment === "right" && "items-end justify-end"
+      )}>
         {children}
       </div>
     </div>

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Theme, themes } from '../types/theme';
+import blueWavesBackground from '../assets/backgrounds/blue-waves.webp';
 
 interface ThemeContextType {
   currentTheme: Theme;
@@ -22,7 +23,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Always use liquid glass theme
   const liquidGlassTheme = themes.find(t => t.id === 'liquid-glass') || themes[0];
   const [currentTheme] = useState<Theme>(liquidGlassTheme);
-  const [customBackground, setCustomBackground] = useState<string>('');
+  const [customBackground, setCustomBackground] = useState<string>(`url(${blueWavesBackground})`);
 
   const handleSetCustomBackground = (background: string) => {
     setCustomBackground(background);
@@ -91,11 +92,16 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     // Always apply liquid glass theme
     applyThemeToDocument(liquidGlassTheme);
     
-    // Load saved background from localStorage
-    const savedBackground = localStorage.getItem('email-client-custom-background') || '';
+    // Load saved background from localStorage, or use default blue waves
+    const savedBackground = localStorage.getItem('email-client-custom-background');
     if (savedBackground) {
       setCustomBackground(savedBackground);
       applyCustomBackground(savedBackground);
+    } else {
+      // Apply default blue waves background
+      const defaultBackground = `url(${blueWavesBackground})`;
+      setCustomBackground(defaultBackground);
+      applyCustomBackground(defaultBackground);
     }
   }, [liquidGlassTheme]);
 

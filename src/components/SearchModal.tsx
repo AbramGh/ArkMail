@@ -8,6 +8,7 @@ import { Email, EmailSearch } from '../types/email';
 import { emailService } from '../services/emailService';
 import { useTheme } from '../contexts/ThemeContext';
 import { cn } from '../lib/utils';
+import { Button } from './ui/Button';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -135,20 +136,13 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     )}
                   />
                 </div>
-                <motion.button
+                <Button
                   onClick={() => setShowAdvanced(!showAdvanced)}
-                  className={cn(
-                    "flex items-center gap-2 px-4 py-4 rounded-xl font-light",
-                    showAdvanced 
-                      ? (isLiquidGlass ? "liquid-glass-button" : "gradient-button")
-                      : "secondary-button"
-                  )}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  variant={showAdvanced ? 'primary' : 'secondary'}
+                  icon={<Filter size={16} />}
                 >
-                  <Filter size={16} />
                   Advanced
-                </motion.button>
+                </Button>
                 <motion.button
                   onClick={onClose}
                   className="p-4 hover:bg-cream/10 rounded-xl transition-colors"
@@ -247,25 +241,19 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     </div>
 
                     <div className="flex gap-3">
-                      <motion.button
+                      <Button
                         onClick={performSearch}
-                        className={cn(
-                          "flex items-center gap-2 px-4 py-2 rounded-xl font-medium",
-                          isLiquidGlass ? "liquid-glass-button" : "gradient-button"
-                        )}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        variant="primary"
+                        icon={<Search size={16} />}
                       >
-                        <Search size={16} />
                         Search
-                      </motion.button>
-                      <motion.button
+                      </Button>
+                      <Button
                         onClick={clearSearch}
-                        className="px-4 py-2 text-cream/70 hover:bg-cream/10 rounded-xl transition-colors font-light"
-                        whileHover={{ scale: 1.02 }}
+                        variant="ghost"
                       >
                         Clear
-                      </motion.button>
+                      </Button>
                     </div>
                   </motion.div>
                 )}

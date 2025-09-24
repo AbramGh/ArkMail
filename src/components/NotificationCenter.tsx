@@ -9,6 +9,7 @@ import { EmailNotification } from '../types/email';
 import { notificationService } from '../services/notificationService';
 import { useTheme } from '../contexts/ThemeContext';
 import { cn } from '../lib/utils';
+import { Button } from './ui/Button';
 
 interface NotificationCenterProps {
   isOpen: boolean;
@@ -124,45 +125,36 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <motion.button
+                <Button
                   onClick={handleMarkAllAsRead}
                   className="text-sm text-cream/70 hover:text-cream transition-colors"
-                  whileHover={{ scale: 1.05 }}
                 >
                   Mark all read
-                </motion.button>
-                <motion.button
+                </Button>
+                <Button
                   onClick={onClose}
                   className="p-2 hover:bg-cream/10 rounded-lg transition-colors"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
                 >
                   <X size={18} className="text-cream/70" />
-                </motion.button>
+                </Button>
               </div>
             </div>
 
             {/* Filter Tabs */}
             <div className="flex items-center gap-1 p-4 border-b border-cream/10">
-              {[
-                { key: 'all', label: 'All' },
-                { key: 'unread', label: 'Unread' },
-                { key: 'important', label: 'Important' }
-              ].map((tab) => (
-                <motion.button
-                  key={tab.key}
-                  onClick={() => setFilter(tab.key as any)}
+              {['all', 'unread', 'important'].map((tab) => (
+                <Button
+                  key={tab}
+                  onClick={() => setFilter(tab as any)}
                   className={cn(
                     "px-4 py-2 rounded-lg text-sm font-light transition-colors",
-                    filter === tab.key
+                    filter === tab
                       ? "bg-cream/20 text-cream"
                       : "text-cream/60 hover:text-cream/80 hover:bg-cream/10"
                   )}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                 >
-                  {tab.label}
-                </motion.button>
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </Button>
               ))}
             </div>
 
@@ -216,14 +208,13 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                           {notification.actions && notification.actions.length > 0 && (
                             <div className="flex gap-2">
                               {notification.actions.map((action, actionIndex) => (
-                                <motion.button
+                                <Button
                                   key={actionIndex}
-                                  className="px-3 py-1 text-xs bg-cream/10 hover:bg-cream/20 rounded-lg transition-colors"
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.95 }}
+                                  variant="ghost"
+                                  size="sm"
                                 >
                                   {action.label}
-                                </motion.button>
+                                </Button>
                               ))}
                             </div>
                           )}
@@ -231,25 +222,21 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                         
                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           {!notification.isRead && (
-                            <motion.button
+                            <Button
                               onClick={() => handleMarkAsRead(notification.id)}
                               className="p-1 hover:bg-cream/20 rounded transition-colors"
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
                               title="Mark as read"
                             >
                               <Check size={14} className="text-cream/60" />
-                            </motion.button>
+                            </Button>
                           )}
-                          <motion.button
+                          <Button
                             onClick={() => handleRemoveNotification(notification.id)}
                             className="p-1 hover:bg-cream/20 rounded transition-colors"
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
                             title="Remove"
                           >
                             <X size={14} className="text-cream/60" />
-                          </motion.button>
+                          </Button>
                         </div>
                       </div>
                     </motion.div>
@@ -264,13 +251,12 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                 <span className="text-sm text-cream/60 font-light">
                   {filteredNotifications.length} notification{filteredNotifications.length !== 1 ? 's' : ''}
                 </span>
-                <motion.button
-                  className="flex items-center gap-2 text-sm text-cream/70 hover:text-cream transition-colors"
-                  whileHover={{ scale: 1.05 }}
+                <Button
+                  variant="ghost"
+                  icon={<Settings size={14} />}
                 >
-                  <Settings size={14} />
                   Settings
-                </motion.button>
+                </Button>
               </div>
             </div>
           </motion.div>

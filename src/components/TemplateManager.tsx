@@ -7,6 +7,7 @@ import {
 import { EmailTemplate } from '../types/email';
 import { useTheme } from '../contexts/ThemeContext';
 import { cn } from '../lib/utils';
+import { Button } from './ui/Button';
 
 interface TemplateManagerProps {
   isOpen: boolean;
@@ -184,18 +185,13 @@ export const TemplateManager: React.FC<TemplateManagerProps> = ({
               <div className="p-6 border-b border-cream/10">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-light text-cream">Templates</h2>
-                  <motion.button
+                  <Button
                     onClick={handleCreateTemplate}
-                    className={cn(
-                      "flex items-center gap-2 px-3 py-2 rounded-lg font-medium",
-                      isLiquidGlass ? "liquid-glass-button" : "gradient-button"
-                    )}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    variant="primary"
+                    icon={<Plus size={16} />}
                   >
-                    <Plus size={16} />
                     New
-                  </motion.button>
+                  </Button>
                 </div>
 
                 {/* Search */}
@@ -308,52 +304,40 @@ export const TemplateManager: React.FC<TemplateManagerProps> = ({
                     <>
                       {!isEditing ? (
                         <>
-                          <motion.button
+                          <Button
                             onClick={() => setIsEditing(true)}
-                            className="flex items-center gap-2 px-3 py-2 text-cream/70 hover:text-cream transition-colors"
-                            whileHover={{ scale: 1.05 }}
+                            variant="ghost"
+                            icon={<Edit size={16} />}
                           >
-                            <Edit size={16} />
                             Edit
-                          </motion.button>
+                          </Button>
                           {onSelectTemplate && (
-                            <motion.button
+                            <Button
                               onClick={() => {
                                 onSelectTemplate(selectedTemplate);
                                 onClose();
                               }}
-                              className={cn(
-                                "flex items-center gap-2 px-4 py-2 rounded-lg font-medium",
-                                isLiquidGlass ? "liquid-glass-button" : "gradient-button"
-                              )}
-                              whileHover={{ scale: 1.02 }}
-                              whileTap={{ scale: 0.98 }}
+                              variant="primary"
                             >
                               Use Template
-                            </motion.button>
+                            </Button>
                           )}
                         </>
                       ) : (
                         <>
-                          <motion.button
+                          <Button
                             onClick={() => setIsEditing(false)}
-                            className="px-3 py-2 text-cream/70 hover:text-cream transition-colors"
-                            whileHover={{ scale: 1.05 }}
+                            variant="ghost"
                           >
                             Cancel
-                          </motion.button>
-                          <motion.button
+                          </Button>
+                          <Button
                             onClick={handleSaveTemplate}
-                            className={cn(
-                              "flex items-center gap-2 px-4 py-2 rounded-lg font-medium",
-                              isLiquidGlass ? "liquid-glass-button" : "gradient-button"
-                            )}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                            variant="primary"
+                            icon={<Save size={16} />}
                           >
-                            <Save size={16} />
                             Save
-                          </motion.button>
+                          </Button>
                         </>
                       )}
                     </>

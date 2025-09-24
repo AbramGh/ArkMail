@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { cn } from '../lib/utils';
+import { Button } from './ui/Button';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -148,16 +149,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
               onChange={handleFileUpload}
               className="hidden"
             />
-            <motion.button
+            <Button
               onClick={triggerFileUpload}
-              className="px-4 py-3 bg-current/20 text-cream rounded-xl hover:bg-current/30 transition-colors font-light flex items-center gap-2"
-              style={{ backgroundColor: `${currentTheme.colors.primary}20` }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              variant="secondary"
+              icon={<FileImage size={16} />}
             >
-              <FileImage size={16} />
               Upload
-            </motion.button>
+            </Button>
             <input
               type="text"
               value={backgroundInput}
@@ -166,24 +164,19 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
               className="flex-1 px-4 py-3 rounded-xl bg-cream/10 border border-cream/20 text-cream placeholder-cream/50 focus:outline-none focus:border-cream/40 font-light"
               readOnly={!!uploadedFile}
             />
-            <motion.button
+            <Button
               onClick={handleBackgroundChange}
-              className="px-6 py-3 bg-current/20 text-cream rounded-xl hover:bg-current/30 transition-colors font-light"
+              variant="primary"
               disabled={!backgroundInput.trim() && !uploadedFile}
-              style={{ backgroundColor: `${currentTheme.colors.primary}20` }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
             >
               Apply
-            </motion.button>
-            <motion.button
+            </Button>
+            <Button
               onClick={handleBackgroundClear}
-              className="px-6 py-3 bg-cream/10 text-cream/70 rounded-xl hover:bg-cream/20 transition-colors font-light"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              variant="ghost"
             >
               Clear
-            </motion.button>
+            </Button>
           </div>
           
           <div className="text-sm text-cream/60 font-light">

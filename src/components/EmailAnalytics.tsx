@@ -8,6 +8,7 @@ import {
 import { EmailAnalytics as EmailAnalyticsType } from '../types/email';
 import { useTheme } from '../contexts/ThemeContext';
 import { cn } from '../lib/utils';
+import { Button } from './ui/Button';
 
 interface EmailAnalyticsProps {
   isOpen: boolean;
@@ -121,23 +122,19 @@ export const EmailAnalytics: React.FC<EmailAnalyticsProps> = ({
                   <option value="90d">Last 90 days</option>
                   <option value="1y">Last year</option>
                 </select>
-                <motion.button
+                <Button
                   onClick={loadAnalytics}
-                  className="p-2 hover:bg-cream/10 rounded-lg transition-colors"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
+                  variant="ghost"
                   disabled={isLoading}
                 >
                   <RefreshCw size={16} className={`text-cream/70 ${isLoading ? 'animate-spin' : ''}`} />
-                </motion.button>
-                <motion.button
+                </Button>
+                <Button
                   onClick={onClose}
-                  className="p-2 hover:bg-cream/10 rounded-lg transition-colors"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
+                  variant="ghost"
                 >
                   <X size={18} className="text-cream/70" />
-                </motion.button>
+                </Button>
               </div>
             </div>
 

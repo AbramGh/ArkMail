@@ -8,6 +8,7 @@ import { EmailAccount } from '../types/email';
 import { emailService } from '../services/emailService';
 import { useTheme } from '../contexts/ThemeContext';
 import { cn } from '../lib/utils';
+import { Button } from './ui/Button';
 
 interface AccountManagerProps {
   isOpen: boolean;
@@ -22,7 +23,7 @@ export const AccountManager: React.FC<AccountManagerProps> = ({ isOpen, onClose 
   const [newAccount, setNewAccount] = useState({
     name: '',
     email: '',
-    provider: 'gmail' as const,
+    provider: 'gmail' as 'gmail' | 'outlook' | 'yahoo' | 'imap',
     password: '',
     imapServer: '',
     imapPort: 993,
@@ -271,27 +272,21 @@ export const AccountManager: React.FC<AccountManagerProps> = ({ isOpen, onClose 
                   )}
 
                   <div className="flex gap-3">
-                    <motion.button
+                    <Button
                       onClick={handleAddAccount}
-                      className={cn(
-                        "flex items-center gap-2 px-6 py-3 rounded-xl font-medium",
-                        isLiquidGlass ? "liquid-glass-button" : "gradient-button"
-                      )}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      variant="primary"
                     >
                       Add Account
-                    </motion.button>
-                    <motion.button
+                    </Button>
+                    <Button
                       onClick={() => {
                         setShowAddAccount(false);
                         resetForm();
                       }}
-                      className="px-6 py-3 text-cream/70 hover:bg-cream/10 rounded-xl transition-colors font-light"
-                      whileHover={{ scale: 1.02 }}
+                      variant="ghost"
                     >
                       Cancel
-                    </motion.button>
+                    </Button>
                   </div>
                 </motion.div>
               ) : (

@@ -8,6 +8,7 @@ import {
 import { Email } from '../types/email';
 import { useTheme } from '../contexts/ThemeContext';
 import { cn } from '../lib/utils';
+import { Button } from './ui/Button';
 
 interface ComposeModalProps {
   isOpen: boolean;
@@ -477,33 +478,26 @@ export const ComposeModal: React.FC<ComposeModalProps> = ({
                   </div>
                   
                   <div className="flex items-center gap-4">
-                    <motion.button
+                    <Button
                       onClick={onClose}
-                      className="px-6 py-2 text-cream/70 hover:bg-cream/10 rounded-xl transition-colors font-light"
-                      whileHover={{ scale: 1.02 }}
+                      variant="ghost"
                     >
                       Cancel
-                    </motion.button>
-                    <motion.button
+                    </Button>
+                    <Button
                       onClick={handleSaveDraft}
-                      className="px-6 py-2 text-cream/70 hover:bg-cream/10 rounded-xl transition-colors font-light"
-                      whileHover={{ scale: 1.02 }}
+                      variant="ghost"
                     >
                       Save Draft
-                    </motion.button>
-                    <motion.button
+                    </Button>
+                    <Button
                       onClick={handleSend}
                       disabled={!to.trim() || !subject.trim() || !body.trim()}
-                      className={cn(
-                        "flex items-center gap-2 px-6 py-2 rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed",
-                        isLiquidGlass ? "liquid-glass-button" : "gradient-button"
-                      )}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      variant="primary"
+                      icon={isScheduled ? <Clock size={16} /> : <Send size={16} />}
                     >
-                      {isScheduled ? <Clock size={16} /> : <Send size={16} />}
                       {isScheduled ? 'Schedule' : 'Send'}
-                    </motion.button>
+                    </Button>
                   </div>
                 </motion.div>
               </>

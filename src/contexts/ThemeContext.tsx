@@ -3,7 +3,6 @@ import { Theme, themes } from '../types/theme';
 
 interface ThemeContextType {
   currentTheme: Theme;
-  setTheme: (themeId: string) => void;
   availableThemes: Theme[];
   customBackground: string;
   setCustomBackground: (background: string) => void;
@@ -20,17 +19,10 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState<Theme>(themes[0]);
+  // Always use liquid glass theme
+  const liquidGlassTheme = themes.find(t => t.id === 'liquid-glass') || themes[0];
+  const [currentTheme] = useState<Theme>(liquidGlassTheme);
   const [customBackground, setCustomBackground] = useState<string>('');
-
-  const setTheme = (themeId: string) => {
-    const theme = themes.find(t => t.id === themeId);
-    if (theme) {
-      setCurrentTheme(theme);
-      localStorage.setItem('email-client-theme', themeId);
-      applyThemeToDocument(theme);
-    }
-  };
 
   const handleSetCustomBackground = (background: string) => {
     setCustomBackground(background);
@@ -96,25 +88,16 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   useEffect(() => {
-    // Load saved theme from localStorage
-    const savedThemeId = localStorage.getItem('email-client-theme');
+    // Always apply liquid glass theme
+    applyThemeToDocument(liquidGlassTheme);
+    
+    // Load saved background from localStorage
     const savedBackground = localStorage.getItem('email-client-custom-background') || '';
-    
-    if (savedThemeId) {
-      const savedTheme = themes.find(t => t.id === savedThemeId);
-      if (savedTheme) {
-        setCurrentTheme(savedTheme);
-        applyThemeToDocument(savedTheme);
-      }
-    } else {
-      applyThemeToDocument(currentTheme);
-    }
-    
     if (savedBackground) {
       setCustomBackground(savedBackground);
       applyCustomBackground(savedBackground);
     }
-  }, []);
+  }, [liquidGlassTheme]);
 
   useEffect(() => {
     applyCustomBackground(customBackground);
@@ -123,8 +106,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return (
     <ThemeContext.Provider value={{ 
       currentTheme, 
-      setTheme, 
-      availableThemes: themes,
+      availableThemes: [liquidGlassTheme], // Only provide liquid glass theme
       customBackground,
       setCustomBackground: handleSetCustomBackground
     }}>
